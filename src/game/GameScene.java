@@ -3,18 +3,33 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 
 public class GameScene extends Scene {
 	Rect background, foreground;
-	public GameScene() {
+	Snake snake;
+	KL keyListener;
+	public GameScene(KL keyListener) {
 		background = new Rect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
 		foreground = new Rect(24, 48, 24*31, 24*22);
+		snake = new Snake(3, 48, 48 + 24, 24, 24); //Criando a cobrinha com 3 quadrados
+		this.keyListener = keyListener;
 	}
 	
 	@Override
 	public void update(double dt) {
-		// TODO Auto-generated method stub
+		if (keyListener.isKeyPressed(KeyEvent.VK_UP)) {
+			snake.changeDirection(Direction.UP);
+			
+		} else if(keyListener.isKeyPressed(KeyEvent.VK_DOWN)) {
+			snake.changeDirection(Direction.DOWN);
+		} else if(keyListener.isKeyPressed(KeyEvent.VK_RIGHT)) {
+			snake.changeDirection(Direction.RIGHT);
+		} else if(keyListener.isKeyPressed(KeyEvent.VK_LEFT)) {
+			snake.changeDirection(Direction.LEFT);
+		}
+		snake.update(dt);
 		
 	}
 
@@ -24,9 +39,10 @@ public class GameScene extends Scene {
 		g2.setColor(Color.BLACK);
 		g2.fill(new Rectangle2D.Double(background.x, background.y, background.width, background.height));
 		
-		g2.setColor(Color.WHITE);
+		g2.setColor(Color.PINK);
 		g2.fill(new Rectangle2D.Double(foreground.x, foreground.y, foreground.width, foreground.height ));
 		
+		snake.draw(g2);
 	}
 
 }
