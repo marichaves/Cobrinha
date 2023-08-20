@@ -15,16 +15,6 @@ public class Food {
 	public boolean isSpawned = false;
 
 	// Referência para o retângulo interno.
-//	public Food(Rect background, Snake snake, int width, int height, Color color) {
-//		this.background = background;
-//		this.snake = snake;
-//		this.width = width;
-//		this.height = height;
-//		this.color = color;
-//		this.rect = new Rect(0, 0, width, height);
-//		xPadding = (int) ((Constants.TILE_WIDTH - this.width) / 2.0);
-//	}
-	
 	public Food(Rect foreground, Snake snake, int width, int height, Color color) {
         this.foreground = foreground;
         this.snake = snake;
@@ -35,20 +25,7 @@ public class Food {
         xPadding = (int)((Constants.TILE_WIDTH - this.width) / 2.0);
     }
 
-//	public void spawn() {
-//		do {
-//			double randX = (int) (Math.random() * (int) (background.width / Constants.TILE_WIDTH))
-//					* Constants.TILE_WIDTH;
-//			double randY = (int) (Math.random() * (int) (background.height / Constants.TILE_WIDTH))
-//					* Constants.TILE_WIDTH;
-//
-//			// Ajusta as coordenadas com o xPadding para posicionar a comida corretamente
-//			this.rect.x = randX + xPadding;
-//			this.rect.y = randY + xPadding;
-//
-//		} while (snake.intersectingWithRect(this.rect));
-//		this.isSpawned = true;
-//	}
+
 	
 	  public void spawn() {
 	        do {

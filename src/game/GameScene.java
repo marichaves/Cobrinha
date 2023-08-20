@@ -21,7 +21,7 @@ public class GameScene extends Scene {
 																								// primeiro plano
 		snake = new Snake(3, 48, 48 + 24, 24, 24); // Criando a cobra com 3 segmentos
 		this.keyListener = keyListener; // Inicializando o listener de teclado
-		food = new Food(foreground, snake, 12, 12, Color.green); // Criando comida na área do primeiro plano
+		food = new Food(foreground, snake, 12, 12, Color.RED); // Criando comida na área do primeiro plano
 		food.spawn(); // Gerando a posição inicial da comida
 	}
 
