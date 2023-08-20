@@ -14,7 +14,7 @@ public class Snake {
 
 	public Direction direction = Direction.RIGHT;
 
-	public double ogWaitBetweenUpdates = 0.1f; // Tempo de movimento
+	public double ogWaitBetweenUpdates = 0.2f; // Tempo de movimento da cobra.
 	public double waitTimeLeft = ogWaitBetweenUpdates;
 
 	public Snake(int size, double startX, double startY, double bodyWidth, double bodyHeight) {
@@ -23,7 +23,7 @@ public class Snake {
 		this.bodyWidth = bodyWidth;
 		this.bodyHeight = bodyHeight;
 
-		for (int i = 0; i <= size; i++) {
+		for (int i = 0; i < size; i++) { // Corrected loop condition.
 			Rect bodyPiece = new Rect(startX + i * bodyWidth, startY, bodyWidth, bodyHeight);
 			body[i] = bodyPiece;
 			head++;
@@ -45,36 +45,72 @@ public class Snake {
 	}
 
 	public void update(double dt) {
-		if (waitTimeLeft > 0) {
-			waitTimeLeft -= dt;
-			return;
+	    if (waitTimeLeft > 0) {
+	        waitTimeLeft -= dt;
+	        return;
+	    }
+
+	    if (intersectingWithSelf()) {
+	        Window.getWindow().changeState(0); // Assim que a cobra se atinge, a tela retorna para o menu.
+	    }
+	    waitTimeLeft = ogWaitBetweenUpdates;
+	    double newX = 0;
+	    double newY = 0;
+
+	    if (direction == Direction.RIGHT) {
+	        newX = body[head].x + bodyWidth;
+	        newY = body[head].y;
+	    } else if (direction == Direction.LEFT) {
+	        newX = body[head].x - bodyWidth;
+	        newY = body[head].y;
+
+	    } else if (direction == Direction.UP) {
+	        newX = body[head].x;
+	        newY = body[head].y - bodyHeight; // Up is up and down is down (corrected)
+	    } else if (direction == Direction.DOWN) {
+	        newX = body[head].x;
+	        newY = body[head].y + bodyHeight;
+	    }
+
+	    // Calculate the new positions for the head
+	    double newHeadX = (newX + body[head].x) / 2.0;
+	    double newHeadY = (newY + body[head].y) / 2.0;
+
+	    // Move the tail position
+	    tail = (tail + 1) % body.length;
+
+	    // Move the head position
+	    head = (head + 1) % body.length;
+	    body[head] = new Rect(newHeadX, newHeadY, bodyWidth, bodyHeight);
+
+	    // Update the head's final position
+	    body[head].x = newX;
+	    body[head].y = newY;
+	}
+
+	public boolean intersectingWithSelf() {
+		Rect headR = body[head];
+		return intersectingWithRect(headR);
+	}
+	
+	//Is the snake intersecting with this rectangle?
+	public boolean intersectingWithRect(Rect rect) {
+		
+	for (int i = tail; i != head ; i = (i + 1) % body.length) {
+			if (intersecting(rect, body[i]))
+				return true;
 		}
-		waitTimeLeft = ogWaitBetweenUpdates;
-		double newX = 0;
-		double newY = 0;
-
-		if (direction == Direction.RIGHT) {
-			newX = body[head].x + bodyWidth;
-			newY = body[head].y;
-		} else if (direction == Direction.LEFT) {
-			newX = body[head].x - bodyWidth;
-			newY = body[head].y;
-
-		} else if (direction == Direction.UP) {
-			newX = body[head].x;
-			newY = body[head].y - bodyHeight; // Up is down and down is up (in JAVA)
-		} else if (direction == Direction.DOWN) {
-			newX = body[head].x;
-			newY = body[head].y + bodyHeight;
-		}
-
-		body[(head + 1) % body.length] = body[tail];
-		body[tail] = null;
-		head = (head + 1) % body.length;
-		tail = (tail + 1) % body.length;
-
-		body[head].x = newX;
-		body[head].y = newY;
+		return false;
+	}
+	
+	
+	//	r1 e r2 são os dois retângulos sendo comparados para verificar a sobreposição.
+	//	O método verifica a sobreposição ao longo do eixo x (horizontal) e do eixo y (vertical).
+	//	r1.x >= r2.x: Isso verifica se a borda esquerda de r1 está à direita ou na mesma posição que a borda esquerda de r2.
+	//	Se alguma dessas condições for falsa, significa que os retângulos não se sobrepõem nem horizontal nem verticalmente, e o método retorna false para indicar que eles não estão se sobrepondo.
+	public boolean intersecting(Rect r1, Rect r2) {
+		return (r1.x >= r2.x && r1.x + r1.width <= r2.x + r2.width &&
+				r1.y >= r2.y && r1.y + r1.height <= r2.y + r2.height);
 	}
 
 	public void draw(Graphics2D g2) {
@@ -90,5 +126,10 @@ public class Snake {
 			g2.fill(new Rectangle2D.Double(piece.x + 2.0, piece.y + 4.0 + subHeight, subWidth, subHeight));
 			g2.fill(new Rectangle2D.Double(piece.x + 4.0 + subWidth, piece.y + 4.0 + subHeight, subWidth, subHeight));
 		}
+	}
+
+	public void grow() {
+		System.out.println("Growing");
+		
 	}
 }

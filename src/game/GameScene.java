@@ -10,18 +10,22 @@ public class GameScene extends Scene {
 	Rect background, foreground;
 	Snake snake;
 	KL keyListener;
+	
+	public Food food;
+	
 	public GameScene(KL keyListener) {
 		background = new Rect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
-		foreground = new Rect(24, 48, 24*31, 24*22);
+		foreground = new Rect(24, 48, Constants.TILE_WIDTH *31 , Constants.TILE_WIDTH*22);
 		snake = new Snake(3, 48, 48 + 24, 24, 24); //Criando a cobrinha com 3 quadrados
 		this.keyListener = keyListener;
+		food = new Food(foreground, snake, 12, 12, Color.green);
+		food.spawn();
 	}
 	
 	@Override
 	public void update(double dt) {
 		if (keyListener.isKeyPressed(KeyEvent.VK_UP)) {
 			snake.changeDirection(Direction.UP);
-			
 		} else if(keyListener.isKeyPressed(KeyEvent.VK_DOWN)) {
 			snake.changeDirection(Direction.DOWN);
 		} else if(keyListener.isKeyPressed(KeyEvent.VK_RIGHT)) {
@@ -29,6 +33,9 @@ public class GameScene extends Scene {
 		} else if(keyListener.isKeyPressed(KeyEvent.VK_LEFT)) {
 			snake.changeDirection(Direction.LEFT);
 		}
+		
+		if(!food.isSpawned) food.spawn();
+		food.update(dt);
 		snake.update(dt);
 		
 	}
@@ -43,6 +50,7 @@ public class GameScene extends Scene {
 		g2.fill(new Rectangle2D.Double(foreground.x, foreground.y, foreground.width, foreground.height ));
 		
 		snake.draw(g2);
+		food.draw(g2);
 	}
 
 }
