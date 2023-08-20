@@ -21,12 +21,13 @@ public class MenuScene extends Scene {
 		this.keyListener = keyListener;
 		this.mouseListener = mouseListener;
 		try {
-			BufferedImage spritesheet = ImageIO.read(new File("assets/menuSprite.png"));
+			BufferedImage spritesheet = ImageIO.read(new File("assets/menuSprite2.png"));
 			title = spritesheet.getSubimage(0, 242, 960, 240);
 			play = spritesheet.getSubimage(0, 121, 261, 121);
 			playPressed = spritesheet.getSubimage(264, 121, 261, 121);
 			exit = spritesheet.getSubimage(0, 0, 233, 93);
 			exitPressed = spritesheet.getSubimage(264, 0, 233, 93);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -64,7 +65,7 @@ public class MenuScene extends Scene {
 
 	@Override
 	public void draw(Graphics g) {
-		g.setColor(Color.PINK);
+		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
 
 		g.drawImage(title, (int) titleRect.x, (int) titleRect.y, (int) titleRect.width, (int) titleRect.height, null);
