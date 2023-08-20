@@ -14,7 +14,7 @@ public class Snake {
 
 	public Direction direction = Direction.RIGHT;
 
-	public double ogWaitBetweenUpdates = 0.2f; // Tempo de movimento da cobra.
+	public double ogWaitBetweenUpdates = 0.1f; // Tempo de movimento da cobra.
 	public double waitTimeLeft = ogWaitBetweenUpdates;
 
 	public Snake(int size, double startX, double startY, double bodyWidth, double bodyHeight) {
