@@ -19,7 +19,7 @@ public class GameScene extends Scene {
 		background = new Rect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT); // Criando retângulo de fundo
 		foreground = new Rect(24, 48, Constants.TILE_WIDTH * 31, Constants.TILE_WIDTH * 22); // Criando retângulo de
 																								// primeiro plano
-		snake = new Snake(3, 48, 48 + 24, 24, 24); // Criando a cobra com 3 segmentos
+		snake = new Snake(3, 48, 48 + 24, 24, 24, foreground); // Criando a cobra com 3 segmentos
 		this.keyListener = keyListener; // Inicializando o listener de teclado
 		food = new Food(foreground, snake, 12, 12, Color.RED); // Criando comida na área do primeiro plano
 		food.spawn(); // Gerando a posição inicial da comida

@@ -16,12 +16,14 @@ public class Snake {
 
 	public double ogWaitBetweenUpdates = 0.1f; // Tempo de movimento da cobra.
 	public double waitTimeLeft = ogWaitBetweenUpdates;
+	public Rect background;
 
-	public Snake(int size, double startX, double startY, double bodyWidth, double bodyHeight) {
+	public Snake(int size, double startX, double startY, double bodyWidth, double bodyHeight, Rect background) {
 		// Constructor for how big I want the snake at the beginning.
 		this.size = size;
 		this.bodyWidth = bodyWidth;
 		this.bodyHeight = bodyHeight;
+		this.background = background;
 
 		for (int i = 0; i < size; i++) { // Corrected loop condition.
 			Rect bodyPiece = new Rect(startX + i * bodyWidth, startY, bodyWidth, bodyHeight);
@@ -90,7 +92,7 @@ public class Snake {
 
 	public boolean intersectingWithSelf() {
 		Rect headR = body[head];
-		return intersectingWithRect(headR);
+		return intersectingWithRect(headR) || intersectingWidthScreenBoundaries(headR);
 	}
 	
 	//Is the snake intersecting with this rectangle?
@@ -112,6 +114,8 @@ public class Snake {
 		return (r1.x >= r2.x && r1.x + r1.width <= r2.x + r2.width &&
 				r1.y >= r2.y && r1.y + r1.height <= r2.y + r2.height);
 	}
+	
+	
 
 	public void draw(Graphics2D g2) {
 		for (int i = tail; i != head; i = (i + 1) % body.length) {
@@ -127,9 +131,33 @@ public class Snake {
 			g2.fill(new Rectangle2D.Double(piece.x + 4.0 + subWidth, piece.y + 4.0 + subHeight, subWidth, subHeight));
 		}
 	}
+	
+	public boolean intersectingWidthScreenBoundaries(Rect head) {
+		return (head.x < background.x || (head.x + head.width) > background.x + background.width ||
+				head.y < background.y || (head.y + head.height) > background.y + background.height);
+	}
 
 	public void grow() {
-		System.out.println("Growing");
+		double newX = 0;
+		double newY = 0;
+		 if (direction == Direction.RIGHT) {
+		        newX = body[tail].x - bodyWidth;
+		        newY = body[tail].y;
+		    } else if (direction == Direction.LEFT) {
+		        newX = body[tail].x + bodyWidth;
+		        newY = body[tail].y;
+
+		    } else if (direction == Direction.UP) {
+		        newX = body[tail].x;
+		        newY = body[tail].y + bodyHeight; // Up is up and down is down (corrected)
+		    } else if (direction == Direction.DOWN) {
+		        newX = body[tail].x;
+		        newY = body[tail].y - bodyHeight;
+		    }
+		//System.out.println("Growing");
+		 Rect newBodypPiece = new Rect( newX, newY, bodyWidth, bodyHeight);
+		 tail= (tail - 1) % body.length;
+		 body[tail] = newBodypPiece;
 		
 	}
 }
